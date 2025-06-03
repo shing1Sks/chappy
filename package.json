@@ -1,0 +1,20 @@
+{
+  "name": "chappy",
+  "version": "1.0.0",
+  "description": "Chapter wise performance dashboard apis",
+  "license": "ISC",
+  "author": "Shreyash Kumar Singh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "http-status-codes": "^2.3.0",
+    "mongoose": "^8.15.1",
+    "nodemon": "^3.1.10"
+  }
+}
