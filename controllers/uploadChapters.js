@@ -12,14 +12,25 @@ const uploadChapters = asyncHandler(async (req, res) => {
       .json({ message: "No file uploaded" });
   }
 
-  const data = JSON.parse(fs.readFileSync(file.path, "utf-8"));
+  const filePath = file.path;
+  let data;
+
+  try {
+    data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  } catch (err) {
+    fs.unlinkSync(filePath); // delete even if file parsing fails
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid JSON file" });
+  }
+
   const errors = [];
   const valid = [];
 
   for (const chapter of data) {
     try {
       const doc = new Chapters(chapter);
-      await doc.validate(); // schema validation
+      await doc.validate(); // validate against schema
       valid.push(doc);
     } catch (err) {
       errors.push({ chapter, error: err.message });
@@ -29,6 +40,9 @@ const uploadChapters = asyncHandler(async (req, res) => {
   if (valid.length > 0) {
     await Chapters.insertMany(valid);
   }
+
+  // Clean up
+  fs.unlinkSync(filePath);
 
   return res.status(StatusCodes.OK).json({
     uploaded: valid.length,

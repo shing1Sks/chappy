@@ -18,7 +18,13 @@ const getChapters = asyncHandler(async (req, res) => {
 
   // Apply filters
   const filter = {};
-  const allowedFilters = ["class", "unit", "status", "weakChapters", "subject"];
+  const allowedFilters = [
+    "class",
+    "unit",
+    "status",
+    "isWeakChapter",
+    "subject",
+  ];
   for (const key of allowedFilters) {
     if (req.query[key]) {
       filter[key] = req.query[key];

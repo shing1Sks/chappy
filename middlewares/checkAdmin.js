@@ -1,5 +1,5 @@
 const checkAdmin = (req, res, next) => {
-  if (req.body.role === "admin") {
+  if (req.body?.role === "admin") {
     next();
   } else {
     res

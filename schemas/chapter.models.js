@@ -19,24 +19,9 @@ const chapterSchema = new mongoose.Schema(
       required: true,
     },
     yearWiseQuestionCount: {
-      type: {
-        2019: Number,
-        2020: Number,
-        2021: Number,
-        2022: Number,
-        2023: Number,
-        2024: Number,
-        2025: Number,
-      },
-      default: {
-        2019: 0,
-        2020: 0,
-        2021: 0,
-        2022: 0,
-        2023: 0,
-        2024: 0,
-        2025: 0,
-      },
+      type: Map,
+      of: Number,
+      default: {},
     },
     questionSolved: {
       type: Number,
