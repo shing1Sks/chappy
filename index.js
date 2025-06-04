@@ -17,9 +17,32 @@ import connectDB from "./dbConnect.js";
 // mongoose connection
 connectDB();
 
+// redis connection
+import { client, connectRedis, testRedis } from "./redis.js";
+connectRedis();
+// test redis connection
+testRedis();
+
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
 });
+
+// Applying rate limiting to all API routes
+import rateLimit from "express-rate-limit";
+import RedisStore from "rate-limit-redis";
+
+const limiter = rateLimit({
+  store: new RedisStore({
+    sendCommand: (...args) => client.sendCommand(args),
+  }),
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 30, // limit each IP to 30 requests per minute
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Too many requests, please try again later.",
+});
+
+app.use(limiter);
 
 // logging every request to support debugging
 app.use((req, res, next) => {

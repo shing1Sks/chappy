@@ -1,6 +1,7 @@
 import Chapters from "../schemas/chapter.models.js";
 import { StatusCodes } from "http-status-codes";
 import { asyncHandler } from "../asyncHandler.js";
+import { client } from "../redis.js";
 
 const getChapters = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -40,6 +41,19 @@ const getChapters = asyncHandler(async (req, res) => {
     Chapters.find(filter).skip(skip).limit(limit),
     Chapters.countDocuments(filter),
   ]);
+
+  if (res.locals.cacheKey) {
+    await client.setEx(
+      res.locals.cacheKey,
+      3600,
+      JSON.stringify({
+        totalChapters: total,
+        page,
+        limit,
+        data: chapters,
+      })
+    );
+  }
 
   return res.status(StatusCodes.OK).json({
     totalChapters: total,

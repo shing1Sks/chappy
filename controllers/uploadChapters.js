@@ -2,6 +2,7 @@ import fs from "fs";
 import Chapters from "../schemas/chapter.models.js";
 import { StatusCodes } from "http-status-codes";
 import { asyncHandler } from "../asyncHandler.js";
+import { client } from "../redis.js";
 
 const uploadChapters = asyncHandler(async (req, res) => {
   const file = req.file;
@@ -43,6 +44,10 @@ const uploadChapters = asyncHandler(async (req, res) => {
 
   // Clean up
   fs.unlinkSync(filePath);
+
+  // Clear Redis cache
+  await client.flushAll();
+  console.log("Redis cache cleared after upload");
 
   return res.status(StatusCodes.OK).json({
     uploaded: valid.length,
