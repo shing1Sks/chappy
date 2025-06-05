@@ -58,3 +58,7 @@ app.use("/api/v1", router);
 app.get("/", (req, res) => {
   res.send("<h1>Chappy API is running !</h1>");
 });
+
+app.get("/test", (req, res) => {
+  res.send("<h1>This is only to check some updates !</h1>");
+});
