@@ -59,7 +59,7 @@ Supports the following query parameters:
 
 ## 📤 Deployment
 
-- Deployed at: [chappy](http://13.53.130.41/)
+- Deployed at AWS EC2
 - MongoDB: Cloud (e.g., MongoDB Atlas)
 - Redis: Cloud (e.g., Redis Upstash, Railway)
 
